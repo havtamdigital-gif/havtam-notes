@@ -1290,7 +1290,268 @@ const expandedItems: DictItem[] = [
     relatedTopics:['fetch — קריאת API','async/await ו-Promise','console.log()'] },
 ];
 
+// ── WEB BASICS EXPANSION ─────────────────────────────────────────
+const webBasicsItems: DictItem[] = [
+  { id:'wb-6', term:'HTTP / HTTPS', cat:'Web Basics', level:'beginner',
+    desc:'פרוטוקול התקשורת של האינטרנט. HTTP = לא מוצפן. HTTPS = מוצפן ומאובטח (חובה לאתרים מודרניים).',
+    when:'כל פעם שדפדפן מבקש דף — הוא שולח HTTP request. בלי HTTPS — נתונים עלולים להיחטף.',
+    code:`// HTTP Request שהדפדפן שולח:
+GET /index.html HTTP/1.1
+Host: example.com
+
+// HTTP Response שהשרת מחזיר:
+HTTP/1.1 200 OK
+Content-Type: text/html
+<html>...</html>`,
+    lines:'GET = בקשת קבלת מידע | 200 OK = הצלחה | 404 = לא נמצא | 500 = שגיאת שרת',
+    mistake:'לא לבלבל HTTP (פרוטוקול) עם HTML (שפה). HTTP = איך מעבירים. HTML = מה מעבירים.',
+    exercise:'פתחי DevTools → Network → רפרשי דף ← ראי את כל ה-HTTP requests שנשלחים.',
+    relatedTopics:['URL ו-DNS','fetch API','status codes'] },
+
+  { id:'wb-7', term:'DNS', cat:'Web Basics', level:'beginner',
+    desc:'מערכת שממירה שמות דומיין קריאים (google.com) לכתובות IP מספריות (142.250.80.46) — כמו ספר טלפונים של האינטרנט.',
+    when:'בכל פעם שמקלידים כתובת בדפדפן — DNS מתרגם אותה ל-IP. ללא DNS, היינו צריכים לזכור IPs.',
+    code:`// מה קורה כשמקלידים "google.com":
+1. Browser → DNS Server: "מה ה-IP של google.com?"
+2. DNS → Browser: "142.250.80.46"
+3. Browser → 142.250.80.46: "תן לי את הדף"`,
+    lines:'DNS = Domain Name System | Record A = מיפוי דומיין לIP | TTL = כמה זמן לשמור cache',
+    mistake:'DNS לא אחראי לתוכן הדף — רק לתרגום שם לכתובת IP.',
+    exercise:'פתחי Terminal והקלידי: nslookup google.com — תראי את ה-IP האמיתי.',
+    relatedTopics:['HTTP / HTTPS','URL ו-DNS','hosting'] },
+
+  { id:'wb-8', term:'Cookies', cat:'Web Basics', level:'beginner',
+    desc:'קבצים קטנים שהשרת שולח לדפדפן לשמירת מידע בין בקשות — כניסה לחשבון, העדפות, עגלת קניות.',
+    when:'כשנכנסים לאתר ורוצים שיזכור אותנו (login), או לשמור שפה/ערכת צבעים בין ביקורים.',
+    code:`// שרת שולח cookie:
+Set-Cookie: userId=123; Expires=...
+
+// JS — קריאה וכתיבה:
+document.cookie = "theme=dark; path=/";
+console.log(document.cookie); // "theme=dark"
+
+// localStorage (עדיף לrequired):
+localStorage.setItem('theme', 'dark');
+localStorage.getItem('theme'); // "dark"`,
+    lines:'document.cookie = כתיבה | Expires = תאריך פקיעה | HttpOnly = רק שרת | Secure = רק HTTPS',
+    mistake:'cookie נשלח אוטומטית עם כל request — localStorage לא. לdata רגישה עדיף cookies עם HttpOnly.',
+    exercise:'פתחי DevTools → Application → Cookies — ראי אילו cookies האתר שמור.',
+    relatedTopics:['localStorage','HTTP / HTTPS','fetch API'] },
+
+  { id:'wb-9', term:'Hosting', cat:'Web Basics', level:'beginner',
+    desc:'שירות שמאחסן את קבצי האתר על שרת ומאפשר גישה מהאינטרנט. ללא hosting — האתר קיים רק על המחשב שלך.',
+    when:'כשרוצים שהאתר יהיה זמין לכולם 24/7 ולא רק על המחשב האישי.',
+    code:`// אפשרויות hosting נפוצות:
+// 1. GitHub Pages — חינם לאתרים סטטיים
+// 2. Netlify — drag & drop, חינם
+// 3. Vercel — מצוין לReact/Next
+// 4. AWS / Google Cloud — enterprise
+
+// לפרסום ב-GitHub Pages:
+git push origin main
+// → האתר עולה ל: username.github.io/repo`,
+    lines:'Static hosting = HTML/CSS/JS בלבד | Dynamic hosting = שרת שמריץ קוד | CDN = פריסה מרובת מיקומים',
+    mistake:'GitHub Pages מתאים לאתרים סטטיים בלבד — לא מריץ Node.js או PHP.',
+    exercise:'פרסמי את Havtam\'s Notes ב-GitHub Pages — Settings → Pages → main branch.',
+    relatedTopics:['HTTP / HTTPS','DNS','GitHub'] },
+
+  { id:'wb-10', term:'IP Address', cat:'Web Basics', level:'beginner',
+    desc:'כתובת מספרית ייחודית לכל מכשיר ברשת. IPv4: 4 מספרים (192.168.1.1). IPv6: 8 קבוצות hex.',
+    when:'כל תקשורת באינטרנט דורשת IP. DNS ממיר שמות לIPs. 127.0.0.1 = localhost (המחשב שלך).',
+    code:`// 127.0.0.1 = localhost — המחשב שלך
+// כשמריצים שרת מקומי:
+http://localhost:3000  // = http://127.0.0.1:3000
+
+// בדיקת IP ציבורי בJS:
+const res = await fetch('https://api.ipify.org?format=json');
+const { ip } = await res.json();
+console.log(ip); // הIP הציבורי שלך`,
+    lines:'IP = Internet Protocol | localhost = 127.0.0.1 | port = "דלת" ספציפית על אותו IP',
+    mistake:'127.0.0.1:3000 ← 127.0.0.1 = IP, 3000 = PORT. כל שרת צריך port פנוי.',
+    exercise:'הקלידי בדפדפן: http://127.0.0.1 — זה אותו הדבר כמו localhost.',
+    relatedTopics:['HTTP / HTTPS','DNS','Hosting'] },
+
+  { id:'wb-11', term:'Status Codes', cat:'Web Basics', level:'beginner',
+    desc:'קודים שהשרת מחזיר לדפדפן: 200=הצלחה, 301=הפניה, 404=לא נמצא, 500=שגיאת שרת.',
+    when:'בכל HTTP response יש status code. חיוני לניפוי שגיאות ב-fetch/API.',
+    code:`// הכי חשובים:
+200 OK        // הצלחה
+201 Created   // נוצר (POST)
+301 Moved     // הפניה קבועה
+400 Bad Req   // בקשה שגויה (הlקוח)
+401 Unauth    // לא מחובר
+403 Forbidden // אין הרשאה
+404 Not Found // לא קיים
+500 Server Err// שגיאת שרת
+
+// בדיקה ב-JS:
+const res = await fetch('/api/data');
+if (!res.ok) throw new Error(\`\${res.status}\`);`,
+    lines:'2xx = הצלחה | 3xx = הפניה | 4xx = שגיאת לקוח | 5xx = שגיאת שרת',
+    mistake:'404 = הURL לא קיים (בעיה בURL). 500 = שגיאה בשרת (בעיה בקוד השרת).',
+    exercise:'פתחי DevTools → Network → לחצי על request → ראי את ה-Status בResponse.',
+    relatedTopics:['HTTP / HTTPS','fetch API','async/await'] },
+
+  { id:'wb-12', term:'URL', cat:'Web Basics', level:'beginner',
+    desc:'Uniform Resource Locator — הכתובת המלאה של משאב באינטרנט. כוללת: protocol, domain, path, query, fragment.',
+    when:'כל ניווט באינטרנט משתמש ב-URL. חשוב להבין את המרכיבים לעבודה עם APIs.',
+    code:`// https://example.com:443/blog/post?id=5#comments
+// ────────────────────────────────────────
+// protocol: https
+// domain:   example.com
+// port:     443 (ברירת מחדל להttps)
+// path:     /blog/post
+// query:    ?id=5
+// fragment: #comments (לא נשלח לשרת)
+
+// קריאה ב-JS:
+console.log(location.pathname); // /blog/post
+console.log(location.search);   // ?id=5`,
+    lines:'https = פרוטוקול | example.com = domain | /blog = path | ?id=5 = query params',
+    mistake:'Fragment (#comments) לא נשלח לשרת — רק הדפדפן משתמש בו לגלילה.',
+    exercise:'בדפדפן, שני אתרים ונתחי את ה-URL שלהם לחלקים: protocol / domain / path / query.',
+    relatedTopics:['HTTP / HTTPS','DNS','fetch API'] },
+];
+
+// ── INTERMEDIATE EXPANSION ─────────────────────────────────────
+const intermediateItems: DictItem[] = [
+  { id:'int-1', term:'Git', cat:'Web Basics', level:'intermediate',
+    desc:'מערכת ניהול גרסאות — שומרת היסטוריה של שינויים, מאפשרת שיתוף פעולה ו-rollback לגרסאות ישנות.',
+    when:'כל פרויקט קוד — בלי יוצא מן הכלל. Git הוא כלי ה-#1 לכל מפתח.',
+    code:`git init                    # פתיחת repo חדש
+git add .                   # הוסף כל הקבצים לstaging
+git commit -m "first commit" # שמור snapshot
+git push origin main        # העלה ל-GitHub
+
+git status                  # מה השתנה?
+git log --oneline           # היסטוריה
+git branch feature-x        # ענף חדש
+git checkout -b fix-bug     # צור+עבור לענף`,
+    lines:'init = אתחול | add = staging | commit = snapshot | push = העלאה לשרת | branch = ענף',
+    mistake:'לא לשמור קבצים עם סיסמאות ב-Git! .env + .gitignore חובה לפני push.',
+    exercise:'צרי repo חדש, עשי 3 commits עם שינויים, השתמשי ב-git log לצפייה בהיסטוריה.',
+    relatedTopics:['GitHub','SSH','branching'] },
+
+  { id:'int-2', term:'React — מבוא', cat:'JavaScript', level:'intermediate',
+    desc:'ספריית JavaScript ליצירת ממשקי משתמש. בנויה על components (רכיבים) שכל אחד מנהל את ה-state שלו.',
+    when:'כשאתר מורכב ודורש עדכוני UI תכופים — React מנהל את ה-DOM באופן יעיל.',
+    code:`// Component בסיסי:
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>ספירה: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        הוסף
+      </button>
+    </div>
+  );
+}`,
+    lines:'useState = state פנימי | JSX = HTML בתוך JS | props = נתונים מהורה לילד',
+    mistake:'לא לשנות state ישירות: count++ שגוי! תמיד דרך setCount(count + 1).',
+    exercise:'צרי component Button שמקבל prop label ומציג אותו. השתמשי ב-onClick לספירת לחיצות.',
+    relatedTopics:['useState','props','JSX','components'] },
+
+  { id:'int-3', term:'npm', cat:'Web Basics', level:'intermediate',
+    desc:'Node Package Manager — מנהל החבילות של JavaScript. מאפשר להתקין ספריות (React, Vite, Tailwind...) בפקודה אחת.',
+    when:'כל פרויקט JS מודרני. npm install מתקין את כל הdependencies המוגדרות ב-package.json.',
+    code:`npm init -y              # צור package.json
+npm install react        # התקן react
+npm install -D vite      # devDependency
+
+npm run dev              # הרץ script "dev"
+npm run build            # בנה לprod
+
+# package.json:
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build"
+  }
+}`,
+    lines:'node_modules = כל הספריות שהותקנו | package.json = רשימת dependencies | -D = dev only',
+    mistake:'לא לשמור node_modules ב-Git! הוסיפי node_modules ל-.gitignore — npm install יחזיר אותם.',
+    exercise:'הכנסי לפרויקט קיים והריצי: npm list — ראי את כל הספריות המותקנות.',
+    relatedTopics:['Git','React — מבוא','Vite'] },
+
+  { id:'int-4', term:'API', cat:'Web Basics', level:'intermediate',
+    desc:'Application Programming Interface — ממשק שמאפשר לתוכניות לדבר זו עם זו. REST API = API שפועל דרך HTTP.',
+    when:'כשצריך נתונים מאתר/שירות חיצוני — מזג אוויר, חדשות, תשלום — משתמשים ב-API.',
+    code:`// קריאה ל-REST API עם fetch:
+async function getUser(id) {
+  const res = await fetch(\`/api/users/\${id}\`);
+  if (!res.ok) throw new Error('שגיאה');
+  const user = await res.json();
+  return user;
+}
+
+// POST (שליחת נתונים):
+await fetch('/api/users', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: 'Havtam' }),
+});`,
+    lines:'GET = קבל נתונים | POST = שלח נתונים | PUT = עדכן | DELETE = מחק | JSON = פורמט הנתונים',
+    mistake:'לא לשכוח headers עם Content-Type ב-POST/PUT — בלי זה השרת לא יבין את הגוף.',
+    exercise:'השתמשי ב-fetch("https://jsonplaceholder.typicode.com/posts/1") וצגי את התוצאה.',
+    relatedTopics:['fetch API','async/await','HTTP / HTTPS','Status Codes'] },
+
+  { id:'int-5', term:'TypeScript', cat:'JavaScript', level:'intermediate',
+    desc:'סופרסט של JavaScript שמוסיף typing סטטי. מגלה שגיאות לפני ריצה ומשפר autocomplete ותחזוקה.',
+    when:'בפרויקטים גדולים או בעבודת צוות. React + TypeScript = קומבינציה סטנדרטית בתעשייה.',
+    code:`// JavaScript רגיל — שגיאה מתגלה רק בריצה:
+function add(a, b) { return a + b; }
+add("5", 3); // "53" — בעיה!
+
+// TypeScript — שגיאה מתגלה בקומפייל:
+function add(a: number, b: number): number {
+  return a + b;
+}
+add("5", 3); // ❌ Error: Argument of type string
+
+// סוגים נפוצים:
+const name: string = "Havtam";
+const age: number = 25;
+const isActive: boolean = true;
+const ids: number[] = [1, 2, 3];`,
+    lines:'string | number | boolean = types בסיסיים | interface = הגדרת אובייקט | type = alias',
+    mistake:'TypeScript מתרגם ל-JS בסוף. Errors בTypeScript = שגיאות לפני ריצה — לא בריצה.',
+    exercise:'כתבי פונקציה greet(name: string): string שמחזירה "שלום, " + name. TypeScript יבדוק את הtype.',
+    relatedTopics:['React — מבוא','interfaces','tsconfig'] },
+
+  { id:'int-6', term:'Responsive Design', cat:'CSS', level:'intermediate',
+    desc:'עיצוב שמתאים לכל גדלי המסך — מובייל, טאבלט, דסקטופ. כיום רוב הגלישה היא מהנייד.',
+    when:'בכל אתר מודרני. גוגל מדרג גבוה יותר אתרים responsive. UX גרוע במובייל = אובדן משתמשים.',
+    code:`/* Mobile-first approach: */
+.container { padding: 1rem; }       /* מובייל (default) */
+
+@media (min-width: 768px) {         /* טאבלט+ */
+  .container { padding: 2rem; }
+}
+
+@media (min-width: 1024px) {        /* דסקטופ */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem;
+  }
+}
+
+/* Grid responsive: */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}`,
+    lines:'min-width = breakpoint | mobile-first = מתחילים קטן ומגדילים | viewport = גודל המסך',
+    mistake:'לשכוח את תגית ה-viewport ב-head: <meta name="viewport" content="width=device-width">',
+    exercise:'כתבי card שב-mobile הוא full-width וב-768px+ יש 2 בשורה. השתמשי ב-@media.',
+    relatedTopics:['Media Queries','CSS Grid','flexbox'] },
+];
+
 // Merge into main dict
 dict.push(...extraItems);
 dict.push(...newItems);
 dict.push(...expandedItems);
+dict.push(...webBasicsItems);
+dict.push(...intermediateItems);

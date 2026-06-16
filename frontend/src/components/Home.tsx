@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useProgress } from '../hooks/useProgress';
 
 /* ── Wand trail ── */
 function useWandTrail() {
@@ -93,6 +94,9 @@ function BalloonTitle() {
 export default function Home() {
   useWandTrail();
   const nav = useNavigate();
+  const { progress, streak, getEarnedBadges } = useProgress();
+  const badges = getEarnedBadges();
+  const lessons = progress.completedLessons.length;
 
   return (
     <div className="home-invert" style={{
@@ -126,6 +130,61 @@ export default function Home() {
           למסלול הלמידה
         </button>
       </div>
+
+      {/* Progress stats */}
+      {(lessons > 0 || streak > 0 || badges.length > 0) && (
+        <div style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
+          marginTop: '8px',
+        }}>
+          {/* Streak + lessons row */}
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {streak > 0 && (
+              <div style={{
+                background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.18)', borderRadius: '20px',
+                padding: '6px 16px', fontSize: '0.85rem', color: 'var(--foreground)',
+                display: 'flex', alignItems: 'center', gap: '6px',
+              }}>
+                <span>⚡</span>
+                <span>{streak} {streak === 1 ? 'יום' : 'ימים'} ברצף</span>
+              </div>
+            )}
+            {lessons > 0 && (
+              <div style={{
+                background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.18)', borderRadius: '20px',
+                padding: '6px 16px', fontSize: '0.85rem', color: 'var(--foreground)',
+                display: 'flex', alignItems: 'center', gap: '6px',
+              }}>
+                <span>🎓</span>
+                <span>{lessons}/10 שיעורים</span>
+              </div>
+            )}
+          </div>
+
+          {/* Badges */}
+          {badges.length > 0 && (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '420px' }}>
+              {badges.map(b => (
+                <div key={b.id} title={b.desc} style={{
+                  background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px',
+                  padding: '4px 12px', fontSize: '0.8rem', color: 'var(--foreground)',
+                  cursor: 'default', transition: 'transform 0.15s',
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
+                  onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                >
+                  <span>{b.icon}</span>
+                  <span>{b.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -40,3 +40,4 @@ id_havtam_notes.pub
 *.key
 gen-ssh-key.command
 ssh-push.command
+vite.config.ts.timestamp-*

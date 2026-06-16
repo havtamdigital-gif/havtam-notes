@@ -281,30 +281,24 @@ export default function AIChat() {
     setMessages(m=>[...m,userMsg]);
     setLoading(true);
 
-    const local=handleConvo(q) ?? searchLocal(q);
-    if(local){
+    const reply=handleConvo(q) ?? searchLocal(q);
+    if(reply){
       setTimeout(()=>{
-        setMessages(m=>[...m,{role:'assistant',content:local,timestamp:new Date().toISOString()}]);
+        setMessages(m=>[...m,{role:'assistant',content:reply,timestamp:new Date().toISOString()}]);
         setLoading(false);
       },350);
       return;
     }
 
-    try{
-      const r=await fetch('http://localhost:3001/api/ai/chat',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:q,history:messages.slice(-6)}),
-      });
-      const d=await r.json();
-      setMessages(m=>[...m,{role:'assistant',content:d.reply,timestamp:new Date().toISOString()}]);
-    }catch{
+    // fallback — no API, everything is local
+    setTimeout(()=>{
       setMessages(m=>[...m,{
         role:'assistant',
-        content:`לא מצאתי תשובה מוכנה לשאלה הזו.\n\nנסי לנסח אחרת:\n• **"מה זה [מושג]?"** — הסבר מושג\n• **"הבדל בין X ל-Y"** — השוואה\n• **"איך עושים Z?"** — הוראות\n\nאו חפשי ב-📖 **מילון** — 72 מושגים עם הסבר מלא! 🌸`,
+        content:`לא מצאתי תשובה מוכנה לשאלה הזו 🌸\n\nנסי לנסח אחרת:\n• **"מה זה [מושג]?"** — הסבר מושג\n• **"הבדל בין X ל-Y"** — השוואה\n• **"דוגמה ל-[תגית/property]"** — קוד לדוגמה\n\nאו חפשי ישירות ב-📖 **מילון** — 141 מושגים עם הסבר + קוד + תרגיל!`,
         timestamp:new Date().toISOString(),
       }]);
-    }
-    setLoading(false);
+      setLoading(false);
+    },350);
   };
 
   return(
