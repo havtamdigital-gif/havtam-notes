@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { DictItem } from '../../types';
 
 interface Props {
@@ -15,17 +15,39 @@ const CAT_COLORS: Record<string, { border: string; badge: string; text: string }
 
 export default function DictCard({ item, onTryPlayground }: Props) {
   const [open, setOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const c = CAT_COLORS[item.cat] || CAT_COLORS['Web Basics'];
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card || open) return; // don't tilt when expanded
+    const rect = card.getBoundingClientRect();
+    const dx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
+    const dy = ((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+    card.style.transition = 'none';
+    card.style.transform  = `perspective(700px) rotateX(${-dy * 7}deg) rotateY(${dx * 9}deg) translateY(-4px)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transition = 'transform 0.45s cubic-bezier(.25,.8,.25,1)';
+    card.style.transform  = '';
+  };
 
   return (
     <div
+      ref={cardRef}
       className="card-3d p-4 cursor-pointer"
       style={{
         background: 'white',
         borderRight: `4px solid ${c.border}`,
         boxShadow: open ? '0 8px 24px rgba(233,30,140,0.15)' : '0 2px 12px rgba(233,30,140,0.08)',
-        transform: open ? 'translateY(-2px)' : undefined,
+        transformStyle: 'preserve-3d',
+        willChange: 'transform',
       }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Card header */}
       <div className="flex items-start justify-between gap-2 mb-2" onClick={() => setOpen(o => !o)}>

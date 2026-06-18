@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../hooks/useProgress';
+import ShaderBg from './ShaderBg';
+import ProgressRing3D from './ProgressRing3D';
 
 /* ── Wand trail ── */
 function useWandTrail() {
@@ -103,9 +105,12 @@ export default function Home() {
       minHeight: 'calc(100vh - 60px)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: '32px 24px', position: 'relative', zIndex: 2,
-      gap: '16px',
+      padding: '32px 24px', position: 'relative',
+      gap: '16px', overflow: 'hidden',
     }}>
+      {/* Animated WebGL shader background */}
+      <ShaderBg />
+
       <GlitterRain />
 
       {/* Title */}
@@ -134,31 +139,22 @@ export default function Home() {
       {/* Progress stats */}
       {(lessons > 0 || streak > 0 || badges.length > 0) && (
         <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
           marginTop: '8px',
         }}>
-          {/* Streak + lessons row */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {/* 3D progress ring (lessons) + streak side by side */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {lessons > 0 && <ProgressRing3D lessons={lessons} />}
             {streak > 0 && (
               <div style={{
-                background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.18)', borderRadius: '20px',
-                padding: '6px 16px', fontSize: '0.85rem', color: 'var(--foreground)',
-                display: 'flex', alignItems: 'center', gap: '6px',
+                background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,79,163,0.2)', borderRadius: '20px',
+                padding: '8px 18px', fontSize: '0.88rem', color: '#D63384',
+                display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700,
+                boxShadow: '0 4px 12px rgba(214,51,132,0.12)',
               }}>
-                <span>⚡</span>
+                <span style={{ fontSize: '1.1rem' }}>⚡</span>
                 <span>{streak} {streak === 1 ? 'יום' : 'ימים'} ברצף</span>
-              </div>
-            )}
-            {lessons > 0 && (
-              <div style={{
-                background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.18)', borderRadius: '20px',
-                padding: '6px 16px', fontSize: '0.85rem', color: 'var(--foreground)',
-                display: 'flex', alignItems: 'center', gap: '6px',
-              }}>
-                <span>🎓</span>
-                <span>{lessons}/10 שיעורים</span>
               </div>
             )}
           </div>
@@ -168,11 +164,11 @@ export default function Home() {
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '420px' }}>
               {badges.map(b => (
                 <div key={b.id} title={b.desc} style={{
-                  background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px',
-                  padding: '4px 12px', fontSize: '0.8rem', color: 'var(--foreground)',
+                  background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,79,163,0.18)', borderRadius: '16px',
+                  padding: '4px 12px', fontSize: '0.8rem', color: '#D63384',
                   cursor: 'default', transition: 'transform 0.15s',
-                  display: 'flex', alignItems: 'center', gap: '4px',
+                  display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600,
                 }}
                   onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
                   onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
