@@ -29,4 +29,4 @@ export const router = createBrowserRouter([
       { path: 'auth',           element: authStub },
     ],
   },
-]);
+], { basename: '/havtam-notes' });
