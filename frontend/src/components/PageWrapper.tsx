@@ -5,6 +5,7 @@ import Playground   from './Playground/Playground';
 import LearningPath from './LearningPath/LearningPath';
 import AIChat       from './AIChat/AIChat';
 import CodeHistory  from './CodeHistory/CodeHistory';
+import CodeWriter   from './CodeWriter/CodeWriter';
 import { useState } from 'react';
 
 
@@ -43,6 +44,7 @@ export default function PageWrapper({ page }: Props) {
         {page==='learn'      && <LearningPath/>}
         {page==='ai'         && <AIChat/>}
         {page==='history'    && <CodeHistory onReopen={reopenCode}/>}
+        {page==='code-writer' && <CodeWriter/>}
       </main>
 
       {page==='dict' && (

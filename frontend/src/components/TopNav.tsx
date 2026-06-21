@@ -1,13 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Target, Code2, Sparkles, FolderHeart, LogIn, UserPlus } from "lucide-react";
+import { BookOpen, Target, Code2, Sparkles, FolderHeart, LogIn, UserPlus, WandSparkles } from "lucide-react";
 
 const items = [
-  { to: "/my-code",    label: "הקודים שלי", icon: FolderHeart },
-  { to: "/ai",         label: "שואלת AI",  icon: Sparkles },
-  { to: "/playground", label: "Playground", icon: Code2 },
-  { to: "/roadmap",    label: "מסלול",      icon: Target },
-  { to: "/dictionary", label: "מילון",      icon: BookOpen },
+  { to: "/my-code",      label: "הקודים שלי", icon: FolderHeart },
+  { to: "/ai",           label: "שואלת AI",   icon: Sparkles },
+  { to: "/code-writer",  label: "כותבת קוד",  icon: WandSparkles },
+  { to: "/playground",   label: "Playground",  icon: Code2 },
+  { to: "/roadmap",      label: "מסלול",       icon: Target },
+  { to: "/dictionary",   label: "מילון",       icon: BookOpen },
 ] as const;
 
 export function TopNav() {

@@ -1,6 +1,6 @@
 export type Category = 'HTML' | 'CSS' | 'JavaScript' | 'Web Basics';
 export type Level = 'beginner' | 'basic' | 'intermediate';
-export type AppMode = 'home' | 'dict' | 'learn' | 'playground' | 'history' | 'ai';
+export type AppMode = 'home' | 'dict' | 'learn' | 'playground' | 'history' | 'ai' | 'code-writer';
 
 export interface CodeParts { html?:string; css?:string; js?:string }
 

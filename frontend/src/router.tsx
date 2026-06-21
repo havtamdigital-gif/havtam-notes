@@ -26,6 +26,7 @@ export const router = createBrowserRouter([
       { path: 'ai',             element: <PageWrapper page="ai" /> },
       { path: 'roadmap',        element: <PageWrapper page="learn" /> },
       { path: 'my-code',        element: <PageWrapper page="history" /> },
+      { path: 'code-writer',    element: <PageWrapper page="code-writer" /> },
       { path: 'auth',           element: authStub },
     ],
   },
