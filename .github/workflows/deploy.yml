@@ -28,6 +28,9 @@ jobs:
         working-directory: frontend
         run: npm run build -- --base=/havtam-notes/
 
+      - name: Copy index.html to 404.html for SPA routing
+        run: cp frontend/dist/index.html frontend/dist/404.html
+
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
